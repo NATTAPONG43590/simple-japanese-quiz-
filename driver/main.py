@@ -2,6 +2,7 @@ import json
 import random
 import os
 import glob
+import time
 
 #initial variables declaration
 score = 0
@@ -25,7 +26,10 @@ def get_json(file_name):
     with open(file_path, 'r' , encoding="utf8") as file:
         data = json.load(file)
     return data
+
+start = time.time()
 while True:
+    sec = time.time()
     #get the length of json file in json-data folder
     try:
         total = len(get_json(file_name)["quiz"])
@@ -59,4 +63,4 @@ while True:
     if(len(answered_item) == total * try_per_queston):
         print("You have completed the quiz type 'ex' or crtl+c to exit")
         answered_item = []
-    
+        print("Time Taken", round(sec-start,2), "seconds")
