@@ -1,14 +1,17 @@
-#create flash card game
-#import json data file 
 import json
 import random
 import os
 import glob
 
-is_running = True
+#initial variables declaration
 score = 0
 dir_path = os.path.join(os.path.dirname(__file__), 'json-data')
+temp = None
+answered_item = []
+file_name = "hiragana.json"
+try_per_queston = 2
 
+#json function module
 #get the list of json file in json-data folder
 def get_json_list():
     json_list = []
@@ -22,21 +25,34 @@ def get_json(file_name):
     with open(file_path, 'r' , encoding="utf8") as file:
         data = json.load(file)
     return data
-
-while is_running:
+    
+while True:
     #get the length of json file in json-data folder
-    total = len(get_json("hiragana.json")["quiz"])
+    total = len(get_json(file_name)["quiz"])
     #random number from 0 to total
-    num = random.randint(0, total - 1)
-    guess = input(get_json("hiragana.json")["quiz"][num]["q"] + " = ")
-    if(guess == get_json("hiragana.json")["quiz"][num]["a"]):
+    rand_num = random.randint(0, total - 1)
+    while answered_item.count(rand_num) == try_per_queston and len(answered_item) != total * try_per_queston:
+        rand_num = random.randint(0, total - 1)
+    num = rand_num 
+    answered_item.append(num)
+    guess = input(get_json(file_name)["quiz"][num]["q"] + " = ")
+    if(guess.lower() == "ex"):
+        break
+    elif(guess.lower() == get_json(file_name)["quiz"][num]["a"]):
         print("Correct")
         score += 1
     else:
-        print("Wrong the answer is", get_json("hiragana.json")["quiz"][num]["a"])
-        print("total score ", score)
+        if(guess == ""):
+            print("You didn't enter anything")
+        else:
+            print("Incorrect")
         
-        break
-    
-    
+        print("the answer is", get_json(file_name)["quiz"][num]["a"])    
+        print("total score ", score)
+        score = 0
+            
+    print(len(answered_item) , "/" , total * try_per_queston ,"[",answered_item.count(rand_num),"/",try_per_queston,"]")
+    if(len(answered_item) == total * try_per_queston):
+        print("You have completed the quiz")
+        answered_item = []
     
