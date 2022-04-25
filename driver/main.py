@@ -25,10 +25,14 @@ def get_json(file_name):
     with open(file_path, 'r' , encoding="utf8") as file:
         data = json.load(file)
     return data
-    
 while True:
     #get the length of json file in json-data folder
-    total = len(get_json(file_name)["quiz"])
+    try:
+        total = len(get_json(file_name)["quiz"])
+    except KeyError:
+        print("Error: pls. change the json file name to quiz before start this program")
+        break   
+
     #random number from 0 to total
     rand_num = random.randint(0, total - 1)
     while answered_item.count(rand_num) == try_per_queston and len(answered_item) != total * try_per_queston:
@@ -53,6 +57,6 @@ while True:
             
     print(len(answered_item) , "/" , total * try_per_queston ,"[",answered_item.count(rand_num),"/",try_per_queston,"]")
     if(len(answered_item) == total * try_per_queston):
-        print("You have completed the quiz")
+        print("You have completed the quiz type 'ex' or crtl+c to exit")
         answered_item = []
     
