@@ -35,7 +35,7 @@ def check(ans):
     if(ans.lower() == get_json(file_name)["quiz"][num]["a"]):
         return True
     else:
-        # if(ans == ""):
+        # na
             # print("You didn't enter anything")
         return False
 
